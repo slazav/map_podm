@@ -1,0 +1,13 @@
+#!/bin/sh -efu
+
+# get fig files for editing
+
+for name in "$@"; do
+  base=${name%.*}
+  name="$base.fig"
+  cp -f -- "../fig/$name" "$name"
+
+  vmap_copy --range_nom "$base" --set_brd_from_range\
+            --name "$base" --rscale 50000\
+            "../vmap/$base.vmap" -o "$name"
+done

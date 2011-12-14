@@ -1,0 +1,5 @@
+git log master --pretty=tformat:'%H%x09%at%x09%s' |
+ while read c t n; do
+   d="$(date -d @$t +%Y/%m/%d)"
+   echo -e "$c\t$d: $n"
+ done
