@@ -1,3 +1,6 @@
 *.log
 fig
 bak
+png.bak
+png.last
+lock

@@ -24,7 +24,7 @@ for i in $IN_DIR/*.fig $IN_DIR/*.mp; do
   fi
 
   echo " * updating from: $i"
-  echo " $(date +"%x %X") updating from $i" >> log.txt
+  echo " $(date +"%x %X") updating from $i" >> in.log
 
   # save old file mtime
   ot="$(stat "$i" -c %y)"

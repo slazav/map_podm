@@ -28,7 +28,8 @@ for i in $VMAP_DIR/*.vmap; do
   if [ "$png" -ot "$i" ]; then
     echo "Updating png: $name"
 
-    [ ! -s "$png" ] || mv -- "$png" "$LAST_PNG_DIR/${name}_o.png"
+    [ ! -s "$png" ] ||
+      convert "$png" -scale 50% PNG8:"$LAST_PNG_DIR/${name}_o.png"
 
     # create png & map
     vmap_render --nom "$name" --rscale=50000 -d200 -ND -g4 -m "$map" "$i" "$png"
@@ -37,10 +38,11 @@ for i in $VMAP_DIR/*.vmap; do
     # backup png in $OLD_PNG_DIR
     backup -d "$OLD_PNG_DIR" "$png"
 
-    ln -s "../$png" "$LAST_PNG_DIR/${name}_n.png"
-#    compare "$LAST_PNG_DIR/${name}_o.png"\
-#            "$LAST_PNG_DIR/${name}_n.png"\
-#            "$LAST_PNG_DIR/${name}_d.png" ||:
+    convert "$png" -scale 50% PNG8:"$LAST_PNG_DIR/${name}_n.png"
+
+    compare "$LAST_PNG_DIR/${name}_o.png"\
+            "$LAST_PNG_DIR/${name}_n.png"\
+            PNG8:"$LAST_PNG_DIR/${name}_d.png" ||:
   fi
 
   if [ "$mp.zip" -ot "$i" -o "$img" -ot "$i" ]; then
