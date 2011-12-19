@@ -50,7 +50,7 @@ for i in $IN_DIR/*.fig $IN_DIR/*.mp; do
 
   # crop and put to vmap!
   vmap_copy --range_nom "$name" --range_action crop_spl\
-            --name "$name" --rscale "$SCALE"\
+            --name "$name" --rscale "$SCALE" --set_brd_from_range\
             $sources -o "$vmap"
 
   if [ -s "$old" ]; then

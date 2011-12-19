@@ -1,0 +1,5 @@
+for i in "$@"; do
+  mapsoft_map2fig $i map 500 /d3/05km/37/list.xml
+  mapsoft_map2fig $i map 501 /d3/KS.xml
+  mapsoft_map2fig $i map 503 /d3/AMO.xml
+done
