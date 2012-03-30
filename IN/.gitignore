@@ -4,4 +4,6 @@
 *.bak
 *.mp
 *.zip
+*.plt
+*.wpt
 
