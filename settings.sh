@@ -13,3 +13,5 @@ export IN_DIR=IN
 export OUT_DIR=OUT
 
 export FILTER=mmb
+
+export WRITE_OCAD=true

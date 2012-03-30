@@ -3,6 +3,7 @@
 # updating OUT_DIR
 
 STYLE="${STYLE:-default}"
+SCALE="${SCALE:-50000}"
 OUT_DIR=${OUT_DIR:-OUT}
 VMAP_DIR=${VMAP_DIR:-vmap}
 
@@ -15,7 +16,6 @@ for i in $VMAP_DIR/*.vmap; do
   name=${i%.vmap}
   name=${name##*/}
 
-  ocd="$OUT_DIR/$name.ocd"
   mp="$OUT_DIR/$name.mp"
   png="$OUT_DIR/$name.png"
   map="$OUT_DIR/$name.map"
@@ -32,7 +32,7 @@ for i in $VMAP_DIR/*.vmap; do
       convert "$png" -scale 50% "$LAST_PNG_DIR/${name}_o.png" ||:
 
     # create png & map
-    vmap_render --nom "$name" --rscale=50000 -d200 -ND -g4 -m "$map" "$i" "$png"
+    vmap_render --nom "$name" --rscale=${SCALE} -d200 -ND -g4 -m "$map" "$i" "$png"
     map_rescale -s "$STYLE" "$map"
 
     # backup png in $OLD_PNG_DIR
@@ -47,7 +47,6 @@ for i in $VMAP_DIR/*.vmap; do
 
   if [ "$mp.zip" -ot "$i" -o "$img" -ot "$i" ]; then
     echo "Updating mp and img: $name"
-
     vmap_copy $i -o "$mp" --skip_labels
     update_mpid.sh "$mp"
     cgpsmapper-static "$mp" -o "$img"
@@ -55,11 +54,14 @@ for i in $VMAP_DIR/*.vmap; do
     rm -f "$mp"
   fi
 
-  if [ "$ocd.zip" -ot "$i" ]; then
-    echo "Updating ocad: $name"
-    vmap_copy $i -o "$ocd"
-    zip -j "$ocd.zip" "$ocd"
-    rm -f "$ocd"
+  if [ -n "$WRITE_OCAD" ]; then
+    ocd="$OUT_DIR/$name.ocd"
+    if [ "$ocd.zip" -ot "$i" ]; then
+      echo "Updating ocad: $name"
+      vmap_copy $i -o "$ocd"
+      zip -j "$ocd.zip" "$ocd"
+      rm -f "$ocd"
+    fi
   fi
 
 done
