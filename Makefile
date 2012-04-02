@@ -10,6 +10,8 @@ img:
 	sed -e "/podm.img/s/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}/$(date +%F)/"\
 	  -i /home/sla/CH/data/maps/index.m4i
 
-index:
-	. ./settings.sh; map_update_index.sh 600000x400000+7085000+5970000
+#index:
+#	. ./settings.sh; map_update_index.sh 600000x400000+7085000+5970000
 
+index:
+	. bin/map_update_index.sh 600000x400000+7085000+5970000 index

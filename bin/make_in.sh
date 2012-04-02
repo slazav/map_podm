@@ -29,8 +29,8 @@ for i in $IN_DIR/*.fig $IN_DIR/*.mp; do
   # save old file mtime
   ot="$(stat "$i" -c %y)"
 
-  cp -f "$i" "$i.bak"
-  backup -D -d bak -z -- "$vmap"
+#  cp -f "$i" "$i.bak"
+#  backup -D -d bak -z -- "$vmap"
 
   # mmb-filter
   [ "$FILTER" = mmb ] && vmap_mmb_filter "$i" "$i" ||:

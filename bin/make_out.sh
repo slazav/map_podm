@@ -7,7 +7,7 @@ SCALE="${SCALE:-50000}"
 OUT_DIR=${OUT_DIR:-OUT}
 VMAP_DIR=${VMAP_DIR:-vmap}
 
-OLD_PNG_DIR=${OLD_PNG_DIR:-png.bak}
+#OLD_PNG_DIR=${OLD_PNG_DIR:-png.bak}
 LAST_PNG_DIR=${LAST_PNG_DIR:-png.last}
 
 rm -f -- $LAST_PNG_DIR/*.png
@@ -37,8 +37,8 @@ for i in $VMAP_DIR/*.vmap; do
     vmap_render --nom "$name" --rscale=${SCALE} -d200 -ND -g2 -m "$map" "$i" "$png"
     map_rescale -s "$STYLE" "$map"
 
-    # backup png in $OLD_PNG_DIR
-    backup -d "$OLD_PNG_DIR" "$png"
+#    # backup png in $OLD_PNG_DIR
+#    backup -d "$OLD_PNG_DIR" "$png"
 
     convert "$png" -scale 50% "$LAST_PNG_DIR/${name}_n.png"
 
