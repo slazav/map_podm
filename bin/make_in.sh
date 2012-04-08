@@ -6,7 +6,7 @@ SCALE="${SCALE:-50000}"
 FILTER="${FILTER:-}"
 
 for i in $IN_DIR/*.fig $IN_DIR/*.mp; do
-  [ -f $i ] || continue
+  [ -f "$i" ] || continue
   name=${i%.*}
   name=${name##*/}
   ext=${i##*.}
