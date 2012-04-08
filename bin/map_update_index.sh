@@ -12,11 +12,11 @@ geom=$1
 base=$2
 
 jpeg_scale=0.2
-jpg=all_$base.jpg
-htm=all_$base.htm
-xml=all_$base.xml
-img=all_$base.img
-txt=all_$base.txt
+jpg=$base.jpg
+htm=$base.htm
+xml=$base.xml
+img=$base.img
+txt=$base.txt
 
 cd "$OUT_DIR"
 
@@ -60,16 +60,14 @@ sed -e '
 d="$(date +"%F %T")"
 
 cat >> "$htm" <<-EOF
-	<p><a href="$img">Склейка векторных карт в формате IMG (typ-файл включен)</a></p>
-	<p><a href="$xml">Привезка всех листов в формате mapsoft</a></p>
         <div align=right><i>/$d/</i></div>
 	</body></html>
 	EOF
 
-# make more useful xml
-mapsoft_convert $maps -o "$xml"
+## make more useful xml
+#mapsoft_convert $maps -o "$xml"
 
-# make img file
-gmt -j -v -m "slazav-$base" -o $img $imgs /usr/share/mapsoft/slazav.typ
+## make img file
+#gmt -j -v -m "slazav-$base" -o $img $imgs /usr/share/mapsoft/slazav.typ
 
 cd -
