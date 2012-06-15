@@ -37,7 +37,7 @@ if [ -z "$upd" ]; then echo "no need to update $base index"; exit 0; fi
 mapsoft_convert $maps *.plt --rescale_maps=$jpeg_scale -o "$xml"
 sed -i -e 's/.png/.jpg/g' "$xml"
 mapsoft_convert "$xml" --geom "$geom" -o "$jpg"\
-  --draw_borders --dpi=4 --rscale=100000 --htm="tmp.htm"
+  --map_show_brd --dpi=4 --rscale=100000 --htm="tmp.htm"
 
 cat > "$htm" <<-EOF
 	<html>
