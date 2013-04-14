@@ -54,7 +54,8 @@ for i in $VMAP_DIR/*.vmap; do
     update_mpid.sh "$mp"
     cgpsmapper-static "$mp" -o "$img"
     zip -j "$mp.zip" "$mp"
-    rm -f "$mp"
+#    rm -f "$mp"
+     mv -f -- $mp mp/$name.mp
   fi
 
   # create OCAD
