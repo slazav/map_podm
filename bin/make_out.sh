@@ -30,6 +30,7 @@ for i in $VMAP_DIR/*.vmap; do
   if [ "$png" -ot "$i" ]; then
     echo "Updating png: $name"
 
+    mkdir -p -- "$LAST_PNG_DIR"
     [ -s "$png" ] &&
       convert "$png" -scale 50% "$LAST_PNG_DIR/${name}_o.png" ||:
 
