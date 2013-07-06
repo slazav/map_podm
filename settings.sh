@@ -14,4 +14,4 @@ export OUT_DIR=OUT
 
 export FILTER=mmb
 
-export WRITE_OCAD=true
+export WRITE_OCAD=false
