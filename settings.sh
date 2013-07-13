@@ -14,4 +14,5 @@ export OUT_DIR=OUT
 
 export FILTER=mmb
 
-export WRITE_OCAD=false
+# Set to "YES" if you want ocad files:
+export WRITE_OCAD=""
