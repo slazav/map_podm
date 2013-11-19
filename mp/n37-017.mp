@@ -5026,7 +5026,7 @@ Data0=(55.611561,38.420253)
 
 [POI]
 Type=0x5905
-Label=Hjlybrb
+Label=Родники
 EndLevel=1
 Data0=(55.656238,38.067070)
 [END]
