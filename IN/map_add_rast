@@ -1,5 +1,5 @@
 for i in "$@"; do
-  ~/mapsoft/programs/mapsoft_map2fig $i map 500 /home/sla/MAPS/05km/37/list.xml
+ ~/mapsoft/programs/mapsoft_map2fig $i map 500 /home/sla/MAPS/05km/37/list.xml
  ~/mapsoft/programs/mapsoft_map2fig $i map 501 /home/sla/MAPS/KS_NOM/*.map
 #  ~/mapsoft/programs/mapsoft_map2fig mapsoft_map2fig $i map 503 /home/sla/MAPS/AMO.xml
 done
