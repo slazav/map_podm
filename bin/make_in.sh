@@ -54,7 +54,7 @@ for i in $IN_DIR/*.fig $IN_DIR/*.mp; do
             $sources -o "$vmap"
 
   if [ -s "$old" ]; then
-    vmap_fix_diff "$old" "$vmap" "$vmap"
+    ~/mapsoft/vector/vmap3/vmap_fix_diff "$old" "$vmap" "$vmap"
   fi
 
   rm -f "$old"
