@@ -406,98 +406,98 @@ Data0=(54.606149,38.767551)
 [POI]
 Type=0x5905
 Label=18км
-EndLevel=1
+EndLevel=3
 Data0=(54.574650,38.834054)
 [END]
 
 [POI]
 Type=0x5905
 Label=21км
-EndLevel=1
+EndLevel=3
 Data0=(54.571570,38.885229)
 [END]
 
 [POI]
 Type=0x5905
 Label=24км
-EndLevel=1
+EndLevel=3
 Data0=(54.583309,38.912192)
 [END]
 
 [POI]
 Type=0x5905
 Label=Дудино-Серебряное
-EndLevel=1
+EndLevel=3
 Data0=(54.477700,38.664839)
 [END]
 
 [POI]
 Type=0x5905
 Label=Жоково
-EndLevel=1
+EndLevel=3
 Data0=(54.602202,38.963671)
 [END]
 
 [POI]
 Type=0x5905
 Label=Клемово
-EndLevel=1
+EndLevel=3
 Data0=(54.538919,38.745270)
 [END]
 
 [POI]
 Type=0x5905
 Label=Кораблевка
-EndLevel=1
+EndLevel=3
 Data0=(54.395560,38.767838)
 [END]
 
 [POI]
 Type=0x5905
 Label=Коровино
-EndLevel=1
+EndLevel=3
 Data0=(54.617895,38.599073)
 [END]
 
 [POI]
 Type=0x5905
-Label=Крутое
-EndLevel=1
+Label=146 км (Крутое)
+EndLevel=3
 Data0=(54.633120,38.580016)
 [END]
 
 [POI]
 Type=0x5905
 Label=Лошатово
-EndLevel=1
+EndLevel=3
 Data0=(54.571381,38.821444)
 [END]
 
 [POI]
 Type=0x5905
 Label=Серебряные Пруды
-EndLevel=1
+EndLevel=3
 Data0=(54.459495,38.721997)
 [END]
 
 [POI]
 Type=0x5905
 Label=Треполье
-EndLevel=1
+EndLevel=3
 Data0=(54.336631,38.831276)
 [END]
 
 [POI]
 Type=0x5905
 Label=Узуново
-EndLevel=1
+EndLevel=3
 Data0=(54.545201,38.620387)
 [END]
 
 [POI]
 Type=0x5905
 Label=ост.п. 152 км
-EndLevel=1
+EndLevel=3
 Data0=(54.586158,38.610349)
 [END]
 
