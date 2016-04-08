@@ -5035,84 +5035,84 @@ Data0=(55.135993,37.463019)
 [POI]
 Type=0x5905
 Label=252км
-EndLevel=1
+EndLevel=3
 Data0=(55.307585,37.007618)
 [END]
 
 [POI]
 Type=0x5905
 Label=66км
-EndLevel=1
+EndLevel=3
 Data0=(55.223178,37.485044)
 [END]
 
 [POI]
 Type=0x5905
 Label=Вяткино
-EndLevel=1
+EndLevel=3
 Data0=(55.256362,37.379367)
 [END]
 
 [POI]
 Type=0x5905
 Label=Кресты
-EndLevel=1
+EndLevel=3
 Data0=(55.275772,37.104044)
 [END]
 
 [POI]
 Type=0x5905
 Label=Луч
-EndLevel=1
+EndLevel=3
 Data0=(55.092908,37.494616)
 [END]
 
 [POI]
 Type=0x5905
 Label=Новогромово
-EndLevel=1
+EndLevel=3
 Data0=(55.264109,37.231599)
 [END]
 
 [POI]
 Type=0x5905
 Label=Сандарово
-EndLevel=1
+EndLevel=3
 Data0=(55.256820,37.446059)
 [END]
 
 [POI]
 Type=0x5905
 Label=Столбовая
-EndLevel=1
+EndLevel=3
 Data0=(55.248532,37.493726)
 [END]
 
 [POI]
 Type=0x5905
 Label=Чепелево
-EndLevel=1
+EndLevel=3
 Data0=(55.182148,37.486618)
 [END]
 
 [POI]
 Type=0x5905
 Label=Чернецкое
-EndLevel=1
+EndLevel=3
 Data0=(55.254924,37.279774)
 [END]
 
 [POI]
 Type=0x5905
 Label=Чехов
-EndLevel=1
+EndLevel=3
 Data0=(55.148427,37.490128)
 [END]
 
 [POI]
 Type=0x5905
 Label=Шарапова Охота
-EndLevel=1
+EndLevel=3
 Data0=(55.041443,37.477204)
 [END]
 
