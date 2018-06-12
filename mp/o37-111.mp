@@ -857,35 +857,30 @@ Data0=(56.727130,37.138600)
 [POI]
 Type=0x5905
 Label=Бол. Волга
-EndLevel=1
 Data0=(56.725093,37.137549)
 [END]
 
 [POI]
 Type=0x5905
 Label=Дубна
-EndLevel=1
 Data0=(56.745299,37.198942)
 [END]
 
 [POI]
 Type=0x5905
 Label=Карманово
-EndLevel=1
 Data0=(56.691863,37.192331)
 [END]
 
 [POI]
 Type=0x5905
 Label=Лебезино
-EndLevel=1
 Data0=(56.770035,37.418465)
 [END]
 
 [POI]
 Type=0x5905
 Label=Савелово
-EndLevel=1
 Data0=(56.855525,37.376400)
 [END]
 

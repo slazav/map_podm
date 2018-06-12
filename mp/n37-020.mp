@@ -3755,56 +3755,48 @@ Data0=(55.659390,39.886300)
 [POI]
 Type=0x5905
 Label=Ботино
-EndLevel=1
 Data0=(55.565534,39.600238)
 [END]
 
 [POI]
 Type=0x5905
 Label=Воймежный
-EndLevel=1
 Data0=(55.565346,39.861574)
 [END]
 
 [POI]
 Type=0x5905
 Label=Кривандино
-EndLevel=1
 Data0=(55.559490,39.686876)
 [END]
 
 [POI]
 Type=0x5905
 Label=Осаново
-EndLevel=1
 Data0=(55.474083,39.659379)
 [END]
 
 [POI]
 Type=0x5905
 Label=Станция Пожега
-EndLevel=1
 Data0=(55.401058,39.673339)
 [END]
 
 [POI]
 Type=0x5905
 Label=Туголесье
-EndLevel=1
 Data0=(55.564654,39.798911)
 [END]
 
 [POI]
 Type=0x5905
 Label=Шатура
-EndLevel=1
 Data0=(55.573025,39.521870)
 [END]
 
 [POI]
 Type=0x5905
 Label=пл. 8 км
-EndLevel=1
 Data0=(55.599208,39.938529)
 [END]
 

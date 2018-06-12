@@ -5172,189 +5172,162 @@ Data0=(55.875950,38.466570)
 [POI]
 Type=0x5905
 Label=Бахчиванджи
-EndLevel=3
 Data0=(55.883287,38.082977)
 [END]
 
 [POI]
 Type=0x5905
 Label=Гагаринская
-EndLevel=3
 Data0=(55.906535,38.035397)
 [END]
 
 [POI]
 Type=0x5905
 Label=Есино
-EndLevel=3
 Data0=(55.720339,38.378809)
 [END]
 
 [POI]
 Type=0x5905
 Label=Железнодорожный
-EndLevel=3
 Data0=(55.752470,38.008088)
 [END]
 
 [POI]
 Type=0x5905
 Label=Захарово
-EndLevel=3
 Data0=(55.872887,38.467385)
 [END]
 
 [POI]
 Type=0x5905
 Label=Кашино
-EndLevel=3
 Data0=(55.812154,38.234281)
 [END]
 
 [POI]
 Type=0x5905
 Label=Колонтаево
-EndLevel=3
 Data0=(55.779669,38.271987)
 [END]
 
 [POI]
 Type=0x5905
 Label=Коренево
-EndLevel=3
 Data0=(55.668194,38.000215)
 [END]
 
 [POI]
 Type=0x5905
 Label=Купавна
-EndLevel=3
 Data0=(55.752994,38.121950)
 [END]
 
 [POI]
 Type=0x5905
 Label=Лесная (64 км)
-EndLevel=3
 Data0=(55.754047,38.363615)
 [END]
 
 [POI]
 Type=0x5905
 Label=Машиностроитель
-EndLevel=3
 Data0=(55.800845,38.454439)
 [END]
 
 [POI]
 Type=0x5905
 Label=Металлург
-EndLevel=3
 Data0=(55.768085,38.468416)
 [END]
 
 [POI]
 Type=0x5905
 Label=Монино
-EndLevel=3
 Data0=(55.843019,38.197716)
 [END]
 
 [POI]
 Type=0x5905
 Label=Ногинск
-EndLevel=3
 Data0=(55.850844,38.443344)
 [END]
 
 [POI]
 Type=0x5905
 Label=Осеевская
-EndLevel=3
 Data0=(55.861073,38.135677)
 [END]
 
 [POI]
 Type=0x5905
 Label=Фрязево
-EndLevel=3
 Data0=(55.732680,38.467018)
 [END]
 
 [POI]
 Type=0x5905
 Label=Фрязино-пасс.
-EndLevel=3
 Data0=(55.963356,38.044044)
 [END]
 
 [POI]
 Type=0x5905
 Label=Фрязино-тов.
-EndLevel=3
 Data0=(55.963472,38.030853)
 [END]
 
 [POI]
 Type=0x5905
 Label=Храпуново
-EndLevel=3
 Data0=(55.721016,38.349165)
 [END]
 
 [POI]
 Type=0x5905
 Label=Циолковская
-EndLevel=3
 Data0=(55.870203,38.103132)
 [END]
 
 [POI]
 Type=0x5905
 Label=Черное
-EndLevel=3
 Data0=(55.753276,38.061517)
 [END]
 
 [POI]
 Type=0x5905
 Label=Чкаловская
-EndLevel=3
 Data0=(55.897506,38.062587)
 [END]
 
 [POI]
 Type=0x5905
 Label=Щелково
-EndLevel=3
 Data0=(55.910683,38.009072)
 [END]
 
 [POI]
 Type=0x5905
 Label=Электросталь
-EndLevel=3
 Data0=(55.786545,38.460739)
 [END]
 
 [POI]
 Type=0x5905
 Label=Электроугли
-EndLevel=3
 Data0=(55.729869,38.202499)
 [END]
 
 [POI]
 Type=0x5905
 Label=пл. 33 км
-EndLevel=3
 Data0=(55.744177,38.152002)
 [END]
 
 [POI]
 Type=0x5905
 Label=пл. 43 км
-EndLevel=3
 Data0=(55.722215,38.291487)
 [END]
 

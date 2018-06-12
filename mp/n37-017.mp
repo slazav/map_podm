@@ -5117,189 +5117,162 @@ Data0=(55.437165,38.479779)
 [POI]
 Type=0x5905
 Label=49 км
-EndLevel=3
 Data0=(55.628859,38.313524)
 [END]
 
 [POI]
 Type=0x5905
 Label=52 км
-EndLevel=3
 Data0=(55.628205,38.351591)
 [END]
 
 [POI]
 Type=0x5905
 Label=55 км
-EndLevel=3
 Data0=(55.611561,38.420253)
 [END]
 
 [POI]
 Type=0x5905
 Label=Бронницы
-EndLevel=3
 Data0=(55.498677,38.362774)
 [END]
 
 [POI]
 Type=0x5905
 Label=Быково
-EndLevel=3
 Data0=(55.626623,38.071206)
 [END]
 
 [POI]
 Type=0x5905
 Label=Вялки
-EndLevel=3
 Data0=(55.648241,38.111529)
 [END]
 
 [POI]
 Type=0x5905
 Label=Гжель
-EndLevel=3
 Data0=(55.608813,38.446302)
 [END]
 
 [POI]
 Type=0x5905
 Label=Григорово
-EndLevel=3
 Data0=(55.625633,38.388366)
 [END]
 
 [POI]
 Type=0x5905
 Label=Донино
-EndLevel=3
 Data0=(55.636220,38.275072)
 [END]
 
 [POI]
 Type=0x5905
 Label=Загорново
-EndLevel=3
 Data0=(55.514782,38.337598)
 [END]
 
 [POI]
 Type=0x5905
 Label=Ильинская
-EndLevel=3
 Data0=(55.616721,38.100177)
 [END]
 
 [POI]
 Type=0x5905
 Label=Малаховка
-EndLevel=3
 Data0=(55.645389,38.007407)
 [END]
 
 [POI]
 Type=0x5905
 Label=Овражки
-EndLevel=3
 Data0=(55.664192,38.035237)
 [END]
 
 [POI]
 Type=0x5905
 Label=Отдых
-EndLevel=3
 Data0=(55.601460,38.137463)
 [END]
 
 [POI]
 Type=0x5905
 Label=Радуга
-EndLevel=3
 Data0=(55.483163,38.399721)
 [END]
 
 [POI]
 Type=0x5905
 Label=Раменское
-EndLevel=3
 Data0=(55.565194,38.227041)
 [END]
 
 [POI]
 Type=0x5905
 Label=Родники
-EndLevel=3
 Data0=(55.656238,38.067070)
 [END]
 
 [POI]
 Type=0x5905
 Label=Совхоз
-EndLevel=3
 Data0=(55.541076,38.293156)
 [END]
 
 [POI]
 Type=0x5905
 Label=Удельная
-EndLevel=3
 Data0=(55.634192,38.045798)
 [END]
 
 [POI]
 Type=0x5905
 Label=Фабричная
-EndLevel=3
 Data0=(55.572958,38.207270)
 [END]
 
 [POI]
 Type=0x5905
 Label=Фаустово
-EndLevel=3
 Data0=(55.445039,38.496465)
 [END]
 
 [POI]
 Type=0x5905
 Label=Хрипань
-EndLevel=3
 Data0=(55.638768,38.174780)
 [END]
 
 [POI]
 Type=0x5905
 Label=Ьелозерский
-EndLevel=3
 Data0=(55.461540,38.449961)
 [END]
 
 [POI]
 Type=0x5905
 Label=пл. 41 км
-EndLevel=3
 Data0=(55.637203,38.201377)
 [END]
 
 [POI]
 Type=0x5905
 Label=пл. 42 км
-EndLevel=3
 Data0=(55.582029,38.184795)
 [END]
 
 [POI]
 Type=0x5905
 Label=пл. 47 км
-EndLevel=3
 Data0=(55.560101,38.240621)
 [END]
 
 [POI]
 Type=0x5905
 Label=пл. 63 км
-EndLevel=3
 Data0=(55.471458,38.427753)
 [END]
 
