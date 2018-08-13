@@ -43,7 +43,7 @@ for i in $VMAP_DIR/*.vmap; do
 
     convert "$png" -scale 50% "$LAST_PNG_DIR/${name}_n.png"
 
-    compare "$LAST_PNG_DIR/${name}_o.png"\
+    compare -matte "$LAST_PNG_DIR/${name}_o.png"\
             "$LAST_PNG_DIR/${name}_n.png"\
             PNG8:"$LAST_PNG_DIR/${name}_d.png" ||:
   fi

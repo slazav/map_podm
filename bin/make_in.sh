@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 
 IN_DIR="${IN_DIR:-IN}"
 VMAP_DIR="${VMAP_DIR:-vmap}"
