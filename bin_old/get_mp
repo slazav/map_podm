@@ -1,3 +1,0 @@
-#!/bin/sh -e
-
-vmap_copy "$@" -o out.mp --skip_labels --set_brd "" --join_objects 1e-4

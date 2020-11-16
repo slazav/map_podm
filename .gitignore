@@ -1,7 +1,9 @@
 *.log
 fig
-bak
-png.bak
-png.last
 lock
-sync_sv
+diff
+
+IN
+OUT*
+TILES
+mapdb

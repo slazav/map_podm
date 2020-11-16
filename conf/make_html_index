@@ -1,0 +1,47 @@
+#!/bin/sh -efu
+
+# make HTML index for multiple maps
+# usage:
+#   make_html_index <name> <html_area> <odir>
+
+name=$1
+area=${2:-}
+odir=${3:-../OUT}
+
+txt="$odir/all_$name.txt"
+img="$odir/all_$name.img"
+
+## HTML header
+cat <<EOF
+<html>
+<head>
+  <title>$name</title>
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+</head>
+<body>
+EOF
+
+## Map-specific text file
+[ ! -f "$txt" ] || cat "$txt"
+
+## Area (produced by mapsoft)
+[ ! -f "$area" ] || sed -e '
+  /^<area/ {
+    s/"\([^"]*\)\.jpg"/"\1.htm"/
+  }
+  s|'$odir'/||g
+  /<\/html>/d
+  /<html>/d
+' "$area"
+
+## tail
+cat <<EOF
+  </ul>
+  <p><a href="$img">Полная карта для Garmin, IMG</a>
+  <p><a href="https://github.com/slazav/map_hr">
+      Исходники карт на github (самодельный векторный формат)</a>
+  <p>Замечания и дополнения принимаются по адресу slazav at altlinux.org.
+  <p>Последнее обновление: $(date +"%F %X")
+</body>
+</html>
+EOF
