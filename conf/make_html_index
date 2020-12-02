@@ -9,7 +9,6 @@ area=${2:-}
 odir=${3:-../OUT}
 
 txt="$odir/all_$name.txt"
-img="$odir/all_$name.img"
 
 ## HTML header
 cat <<EOF
@@ -37,7 +36,7 @@ EOF
 ## tail
 cat <<EOF
   </ul>
-  <p><a href="$img">Полная карта для Garmin, IMG</a>
+  <p><a href="all_$name.img">Полная карта для Garmin, IMG</a>
   <p><a href="https://github.com/slazav/map_hr">
       Исходники карт на github (самодельный векторный формат)</a>
   <p>Замечания и дополнения принимаются по адресу slazav at altlinux.org.
