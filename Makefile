@@ -36,6 +36,8 @@ IMG = $(patsubst $(VDIR)/%.vmap, $(ODIR)/%.img,     $(VMAP))
 HTM = $(patsubst $(VDIR)/%.vmap, $(ODIR)/%.htm,     $(VMAP))
 MDB = $(patsubst $(VDIR)/%.vmap, $(DBDIR)/%,        $(VMAP))
 
+.PRECIOUS: $(PNG) $(JPG) $(MPZ) $(IMG) $(HTM)
+
 # Map lists
 REGIONS := podm
 
