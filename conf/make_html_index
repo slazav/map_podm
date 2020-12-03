@@ -6,7 +6,8 @@
 
 name=$1
 area=${2:-}
-odir=${3:-../OUT}
+odir=${3:-OUT}
+vdir=${4:-vmap}
 
 txt="$odir/all_$name.txt"
 
@@ -32,6 +33,26 @@ EOF
   /<\/html>/d
   /<html>/d
 ' "$area"
+
+# List of map names
+if [ -f "$area" ]; then
+  names="$(sed -n -r -e '/^<area/ { s/.* href=\"[^\"]*\/([^\"/]+).jpg\".*/\1/p}' "$area")"
+  echo "<ul>"
+  for n in $names; do
+    ## modification time of html
+    #d="$(stat -c %Z "$odir/$n.htm")"
+    #d="$(date -d @$d +%Y-%m-%d)"
+
+    ## last commit in vmap
+    d="$(git log -1 --pretty="format:%ci" "$vdir/$n.vmap" | cut -d ' ' -f 1)"
+    echo "<li><b>$n</b> (<font color=gray>$d</font>): "
+    echo "  <a href=\"$n.png\">[PNG]</a>"
+    echo "  <a href=\"$n.map\">[MAP]</a>"
+    echo "  <a href=\"$n.mp.zip\">[MP.ZIP]</a>"
+    echo "  <a href=\"$n.img\">[IMG]</a>"
+  done
+  echo "</ul>"
+fi
 
 ## tail
 cat <<EOF
