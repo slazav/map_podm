@@ -21,7 +21,8 @@ GMT     := gmt
 
 # scale for jpeg preview images:
 jpeg_scale:=0.2
-
+# scale for index image (in addition to jpeg_scale)
+index_scale:=0.05
 
 # Sources, individual maps
 #VMAP = $(VDIR)/j42-043.vmap
@@ -195,7 +196,7 @@ $(ODIR)/all_%.htm:
 	    $(CFDIR)/MO.plt $(CFDIR)/MKAD.plt --trk_draw_dots 0\
 	    --map_draw_brd 0xFFFF0000 --map_max_sc 100\
 	    --border_wgs '[]'\
-	    --htm "$$tmp.htm" --mag 0.1;\
+	    --htm "$$tmp.htm" --mag $(index_scale);\
 	$(CFDIR)/make_html_index "$*" "$$tmp.htm" "$(ODIR)" > "$@";\
 	rm -f $$tmp.{htm,json}
 
