@@ -183,7 +183,7 @@ $(ODIR)/all_%.img $(ODIR)/all_%.jpg $(ODIR)/all_%.htm:\
 # rule for making img files
 $(ODIR)/all_%.img:
 	img="$(patsubst $(VDIR)/%.vmap, $(ODIR)/%.img, $(VMAP_LIST))";\
-	$(GMT) -j -v -m "slazav-$base" -f 779,3 -o $@ $$img conf/slazav.typ
+	$(GMT) -j -v -m "slazav-$*" -f 779,3 -o $@ $$img conf/slazav.typ
 
 # rule for making index html+image
 $(ODIR)/all_%.jpg: $(ODIR)/all_%.htm
