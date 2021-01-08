@@ -16,12 +16,18 @@ SC=7.5
 ledn.png redk.png vyr_n.png vyr_o.png sand.png: SC=10.4
 #ledn.png redk.png vyr_n.png vyr_o.png sand.png: SC=5.2
 
+OPT=
+## -2,+10
+bol_h.png: OPT=-background transparent -extent 286x60
+## -2,+7
+bol_l.png: OPT=-background transparent -extent 192x83
+
 # fig2dev -t option only allowed for GIF transparent color
 %.gif: %.fig
 	fig2dev -m$(SC) -Lgif -t#ffffff "$<" > "$@"
 
 %.png: %.gif
-	convert -trim "$<" -repage +0+0 PNG32:"$@"
+	convert -trim "$<" -repage +0+0 $(OPT) PNG32:"$@"
 
 %.svg: %.fig
 	fig2dev -m7.5 -Lsvg "$<" > "$@"
