@@ -1,0 +1,115 @@
+#!/bin/sh -eu
+
+# Make index lists (should me run after making png/img files).
+# usage:
+#   make_index -- make everything
+#   make_index <region name of border gpx> -- make one region
+
+MS2MAPDB=ms2mapdb
+MS2NOM=ms2nom
+MS2CONV=ms2conv
+GMT=gmt
+
+# scale for jpeg preview images:
+jpeg_scale=0.2
+# scale for index image (in addition to jpeg_scale)
+index_scale=0.05
+
+# this is needed for nicer index map projection
+files=$(echo vmap/*.vmap | tr " " "\n" | tac)
+echo $files
+
+regs=${@:-brd2/*.gpx}
+
+for brd_file in $regs; do
+  [ -f "$brd_file" ] || brd_file="brd2/$brd_file.gpx"
+  [ -f "$brd_file" ] || continue
+
+  reg=$(basename $brd_file .gpx)
+  echo "Border: $reg"
+
+  htm=OUT/all_$reg.htm
+  jpg=OUT/all_$reg.jpg
+  img=OUT/all_$reg.img
+
+  # Build list of map files, update timestamps
+  list=""
+  imgs=""
+  maps=""
+  img_tstamp="$(mktemp -u tmp_XXXXXX.tstamp)"
+  png_tstamp="$(mktemp -u tmp_XXXXXX.tstamp)"
+  for vmap in $files; do
+    [ -f "$vmap" ] || continue
+    name=$(basename $vmap .vmap)
+    nom=$(./map_get_nom $name)
+
+    # Is the file touches the border?
+    $MS2NOM --ext --name "$nom" --cover "$brd_file" || continue
+    list="$list $name"
+    imgs="$imgs OUT/$name.img"
+    maps="$maps OUT/$name.map"
+
+    [ -s $img_tstamp -a $img_tstamp -nt OUT/$name.img ] ||
+      touch $img_tstamp -r OUT/$name.img
+
+    [ -s $png_tstamp -a $png_tstamp -nt OUT/$name.png ] ||
+      touch $png_tstamp -r OUT/$name.png
+
+  done
+
+  echo "list: $list"
+
+  # make img file
+  [ $img -nt $img_tstamp ] ||
+    $GMT -j -v -m "slazav-$reg" -f 779,3 -o $img $imgs conf/slazav.typ
+  rm -f $img_tstamp
+
+  if [ $htm -nt $png_tstamp -a $jpg -nt $png_tstamp ]; then
+    rm -f $png_tstamp
+    continue
+  fi
+  rm -f $png_tstamp
+
+  # Put all maps in a single json file, use jpeg instead of png
+  # (to make conversion faster)
+  tmp="$(mktemp -u tmp_XXXXXX.json)"
+  $MS2CONV $maps --rescale_maps=$jpeg_scale -o "$tmp"
+  sed -i -e 's/\.png/\.jpg/g' "$tmp"
+
+  # Make thumbnail image + html map
+  echo "Making thumbnail image + html"
+  $MS2CONV "$tmp" brd/*.gpx -o "$jpg"\
+    conf/MO.plt conf/MKAD.plt\
+    --trk_draw_dots 0\
+    --map_draw_brd 0xFFFF0000 --map_max_sc 100 --htm "$htm" --mag $index_scale;\
+  rm -f "$tmp"
+
+  # Fix html map
+  [ ! -f "$htm" ] || sed -e '
+    /^<area/ {
+      s/"\([^"]*\)\.jpg"/"\1.htm"/
+    }
+    s/src="/src="MAPDIR\//
+    s|OUT/|MAPDIR/|g
+    /<\/html>/d
+    /<html>/d
+  ' -i "$htm"
+
+  # Add list of files to html map
+  echo "<ul>" >> "$htm"
+  for n in $list; do
+    ## Use last commit in vmap to put timestamp
+    d="$(git log -1 --pretty="format:%ci" "vmap/$n.vmap" | cut -d ' ' -f 1)"
+
+    echo "<li><b>$n</b> (<font color=gray>$d</font>): "
+    echo "  <a href=\"MAPDIR/$n.png\">[PNG]</a>"
+    echo "  <a href=\"MAPDIR/$n.map\">[MAP]</a>"
+    echo "  <a href=\"MAPDIR/$n.mp.zip\">[MP.ZIP]</a>"
+    echo "  <a href=\"MAPDIR/$n.img\">[IMG]</a>"
+  done >> "$htm"
+  echo "</ul>" >> "$htm"
+
+  # Add link to img file
+  echo "<p><a href=\"MAPDIR/all_$reg.img\">Векторная карта всего района в формате IMG</a>" >> "$htm"
+
+done

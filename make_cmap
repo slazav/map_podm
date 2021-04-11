@@ -1,0 +1,28 @@
+#!/bin/sh -efu
+
+##################################################
+# Colormap.
+# Below there is a rule for generating colormap from one of
+# the maps. The map should contain all colors which can appear.
+# I will now use old colormap instead.
+
+# generate colormap from a single map.
+cmap=cmap.png
+name=n49-032
+MS2MAPDB=ms2mapdb
+vmap_cnf=conf/import_vmap.cfg
+rend_cnf=conf/render.cfg
+
+mapdb=mapdb/tmp
+$MS2MAPDB delete $mapdb
+$MS2MAPDB create $mapdb
+$MS2MAPDB import_vmap $mapdb vmap/$name.vmap --config "$vmap_cnf"
+
+$MS2MAPDB render $mapdb\
+ --out tmp_cmap.png --config "$rend_cnf"\
+ --define "{\"nom_name\":\"$name\", \"hr\":\"1\"}"\
+ --mkref nom --name $name --dpi 200\
+ --cmap_color 255 --cmap_save $cmap --cmap_add 0\
+ --png_format pal
+
+rm -rf tmp_cmap.png $mapdb

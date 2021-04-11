@@ -1,0 +1,101 @@
+#!/bin/sh -eu
+
+# Make preview images.
+
+MS2MAPDB=ms2mapdb
+cmap=conf/cmap.png
+vmap_cnf=conf/import_vmap.cfg
+rend_cnf=conf/render.cfg
+
+files=${@:-vmap/*.vmap}
+
+
+# chack that git is clean
+git_clean=1
+for vmap in $files; do
+
+  name="$(basename $vmap .vmap)"
+  vmap="vmap/$name.vmap"
+  [ -f "$vmap" ] || continue
+
+  st="$(git status --porcelain -- "$vmap")"
+  if [ "$st" != "" ]; then
+    echo "NON-CLEAN GIT STATUS:"
+    echo $st
+    git_clean=""
+  fi
+done
+
+if [ "$git_clean" != 1 ]; then exit 1; fi
+
+
+# For each map file
+for vmap in $files; do
+
+  name="$(basename $vmap .vmap)"
+  vmap="vmap/$name.vmap"
+  [ -f "$vmap" ] || continue
+
+  nom=$(./map_get_nom $name)
+  png="OUT/$name.png"
+  map="OUT/$name.map"
+  jpg="OUT/$name.jpg"
+  htm="OUT/$name.htm"
+  mp="OUT/$name.mp"
+  mpz="OUT/$name.mp.zip"
+  img="OUT/$name.img"
+  new="diff/${name}_n.png"
+  old="diff/${name}_o.png"
+  dif="diff/${name}_d.png"
+
+  # timestamp of the last commit
+  git_t="$(git log --format="%at" -n1 -- "$vmap")"
+  touch -d "@$git_t" "$vmap"
+  git_d="$(date -d "@$git_t" "+map data: %Y-%m-%d")"
+  cur_d="$(date "+render: %Y-%m-%d")"
+
+  # Update mapdb if needed
+  mapdb="mapdb/$name"
+  if [ "$mapdb/objects.db" -ot "$vmap" -o "$mapdb/objects.db" -ot "$vmap_cnf" ]; then
+    echo "Update mapdb: $name"
+    $MS2MAPDB delete $mapdb
+    $MS2MAPDB create $mapdb
+    $MS2MAPDB import_vmap $mapdb $vmap --config "$vmap_cnf"
+  fi
+
+  # Update PNG and MAP if needed
+  if [ "$png" -ot "$vmap" ]; then
+    $MS2MAPDB render $mapdb --out "$png" --config $rend_cnf\
+      --define "{\"nom_name\":\"$nom\", \"hr\":\"1\"}"\
+      --mkref nom --north --name $nom --dpi 200 --margins 10 --top_margin 30\
+      --title "$name   /$git_d, $cur_d/" --title_size 20\
+      --cmap_load $cmap --png_format pal --map $map
+  fi
+
+  # Update JPG + HTM if needed
+  if [ "$jpg" -ot "$png" ]; then
+    echo "Making JPG+HTM: $name"
+    pngtopnm "$png" | pnmscale 0.2 | cjpeg -quality 50 > "$jpg"
+    date=`date +"%Y-%m-%d"`;\
+    sed "s|((NAME))|$name|g;s|((DATE))|$date|g" conf/map.htm > "$htm"
+  fi
+
+  # update MP + IMG
+  if [ "$img" -ot "$vmap" ]; then
+    echo "Making IMG+MP: $name"
+
+    # generate MP
+    id=$(echo $name | md5sum | head -c6 | tr a-z A-Z)
+    id=$(echo -e "ibase=16\n$id\n" | bc)
+    $MS2MAPDB export_mp "$mapdb" "$mp" --name "$name" --id "$id"
+
+    # generate IMG
+    cgpsmapper-static "$mp" -o "$img"
+
+    # generate mp.zip
+    zip -j "$mpz" "$mp"
+    rm -f "$mp"
+  fi
+
+done
+

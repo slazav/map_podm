@@ -1,7 +1,5 @@
 #!/bin/sh -e
 
-# Обновить VMAP из FIG/MP (из директории IN)
-
 IN_DIR=IN
 VMAP_DIR=vmap
 SCALE=50000
@@ -48,20 +46,14 @@ for i in $IN_DIR/*.fig $IN_DIR/*.mp; do
     fi
   fi
 
-  range=$(sed -ne "s/$name\s\+//p" maps.txt ||:)
-  [ -n "$range" ] || range="$name"
-
   # crop and put to vmap!
-  mapsoft_vmap --range_nom "$range" --range_action crop_spl\
+  mapsoft_vmap --range_nom "$name" --range_action crop_spl\
             --name "$name" --rscale "$SCALE" --set_brd_from_range\
             $sources -o "$vmap"
 
   if [ -s "$old" ]; then
     ~/mapsoft/vector/vmap3/vmap_fix_diff "$old" "$vmap" "$vmap"
   fi
-
-  # mmb-filter
-  vmap_mmb_filter "$vmap" "$vmap" ||:
 
   rm -f "$old"
 
@@ -72,12 +64,9 @@ for i in $IN_DIR/*.fig $IN_DIR/*.mp; do
   if [ "$ext" = fig ]; then
     cp -f -- "$i" "fig/$name.fig"
     vmap_copy "fig/$name.fig" -o "fig/$name.fig" --skip_all
-
-    # update fig
-    cd IN
-    ./map_get_fig "$i"
-    cd ..
   fi
 
+  # create fig
+  vmap_copy "$vmap" -o "$i"
   touch -d "$ot" "$i"
 done

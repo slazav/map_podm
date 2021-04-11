@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gpx version='1.1' creator='mapsoft-2'>
+  <trk>
+    <trkseg>
+      <trkpt lat='57.0142189' lon='32.2862080'></trkpt>
+      <trkpt lat='55.9339783' lon='32.3061965'></trkpt>
+      <trkpt lat='54.2418439' lon='34.8907750'></trkpt>
+      <trkpt lat='53.5509486' lon='36.4054878'></trkpt>
+      <trkpt lat='53.5285813' lon='37.5198446'></trkpt>
+      <trkpt lat='54.8904906' lon='42.1415073'></trkpt>
+      <trkpt lat='55.6885607' lon='42.1596103'></trkpt>
+      <trkpt lat='57.3820678' lon='39.6230119'></trkpt>
+      <trkpt lat='57.0215928' lon='32.2994494'></trkpt>
+    </trkseg>
+  </trk>
+</gpx>
