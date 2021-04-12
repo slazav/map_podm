@@ -1,0 +1,37 @@
+#!/bin/sh -efu
+
+# Convert map filename to nomenclature name.
+# In the simple case case: vmap/k44-060.vmap -> k44-060
+# If fist parameter is --old then use mapsoft1 names.
+#
+# Usage:
+#   map_get_nom [--old] <filename> <suffix>
+
+old=0
+if [ "$1" = "--old" ]; then
+  shift
+  old=1
+fi
+
+nom=$(basename $1 ${2:-})
+
+# There was a file maps.txt co convert non-standard names.
+# There are no such names now. It could be possible to
+# do some conversions here.
+
+# Convert name to mapsoft1 style.
+if [ "$old" = 1 ]; then
+
+  # Mapsoft1 uses "-" instead of "," for double sheets:
+  nom=$(echo $nom | sed 's/,/-/')
+
+  # Conversion for ranges of double sheets is
+  # not trivial. Just list all used names.
+  if [ "$nom" = "p54-029.4x1" ]; then nom=p54-029-030.2x1; fi
+  if [ "$nom" = "p54-039.2x2" ]; then nom=p54-039-040.1x2; fi
+  if [ "$nom" = "p54-065.4x3" ]; then nom=p54-065-066.2x3; fi
+  if [ "$nom" = "q40-119.4x2" ]; then nom=q40-119-120.2x2; fi
+  if [ "$nom" = "r46-111.4x4" ]; then nom=r46-111-112.2x4; fi
+fi
+
+echo $nom
