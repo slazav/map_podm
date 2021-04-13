@@ -13,10 +13,10 @@
 MS2MAPDB=ms2mapdb
 MS2NOM=ms2nom
 cmap=conf/cmap.png
-tlist=TILES/tile.list
+tlist=TILES1/tile.list
 vmap_cnf=conf/import_vmap.cfg
 
-mkdir -p TILES
+mkdir -p TILES1
 
 all=0
 if [ "${1:-}" = "--all" ]; then
@@ -59,15 +59,17 @@ for brd_file in brd/*.gpx; do
     fi
 
     $MS2MAPDB render $mapdb --config conf/render.cfg\
-      --define "{\"nom_name\":\"$name\", \"hr\":\"0\", \"border_style\":\"none\"}"\
-      --tmap --add --out "TILES/{x}-{y}-{z}.png" --zmin 7 --zmax 14\
+      --define "{\"nom_name\":\"$name\", \"hr\":\"1\", \"border_style\":\"none\"}"\
+      --tmap --add --out "TILES1/{x}-{y}-{z}.png" --zmin 12 --zmax 12\
       --bgcolor 0 --png_format pal --cmap_load $cmap\
       --border_file $brd_file\
       --tmap_scale 1 --fit_patt_size;\
 
+	exit 0
+
     $MS2MAPDB render $mapdb --config conf/render.cfg\
-      --define "{\"nom_name\":\"$name\", \"hr\":\"0\", \"border_style\":\"none\"}"\
-      --tmap --add --out "TILES/{x}-{y}-{z}.png" --zmin 0 --zmax 6\
+      --define "{\"nom_name\":\"$name\", \"hr\":\"1\", \"border_style\":\"none\"}"\
+      --tmap --add --out "TILES1/{x}-{y}-{z}.png" --zmin 0 --zmax 6\
       --bgcolor 0 --png_format pal --cmap_load $cmap\
       --border_file $brd_file\
       --tmap_scale 1 --mapdb_minsc 1;\
@@ -78,5 +80,5 @@ for brd_file in brd/*.gpx; do
 done
 
 if [ "$need_upd" = 1 ]; then
-  find TILES/ -name '*.png' | xargs md5sum | sed 's| TILES/| |' > $tlist
+  find TILES1/ -name '*.png' | xargs md5sum | sed 's| TILES1/| |' > $tlist
 fi

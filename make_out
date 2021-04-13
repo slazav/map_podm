@@ -66,8 +66,8 @@ for vmap in $files; do
   # Update PNG and MAP if needed
   if [ "$png" -ot "$vmap" ]; then
     $MS2MAPDB render $mapdb --out "$png" --config $rend_cnf\
-      --define "{\"nom_name\":\"$nom\", \"hr\":\"1\"}"\
-      --mkref nom --north --name $nom --dpi 200 --margins 10 --top_margin 30\
+      --define "{\"nom_name\":\"$nom\", \"hr\":\"0\"}"\
+      --mkref nom --north --name $nom --dpi 400 --margins 10 --top_margin 30\
       --title "$name   /$git_d, $cur_d/" --title_size 20\
       --cmap_load $cmap --png_format pal --map $map
   fi

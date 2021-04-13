@@ -8,7 +8,7 @@
 
 # generate colormap from a single map.
 cmap=cmap.png
-name=n49-032
+name=n37-002
 MS2MAPDB=ms2mapdb
 vmap_cnf=conf/import_vmap.cfg
 rend_cnf=conf/render.cfg
@@ -20,7 +20,7 @@ $MS2MAPDB import_vmap $mapdb vmap/$name.vmap --config "$vmap_cnf"
 
 $MS2MAPDB render $mapdb\
  --out tmp_cmap.png --config "$rend_cnf"\
- --define "{\"nom_name\":\"$name\", \"hr\":\"1\"}"\
+ --define "{\"nom_name\":\"$name\", \"hr\":\"0\"}"\
  --mkref nom --name $name --dpi 200\
  --cmap_color 255 --cmap_save $cmap --cmap_add 0\
  --png_format pal

@@ -47,7 +47,7 @@ for vmap in $files; do
     $MS2MAPDB import_vmap $mapdb $o_vmap --config "$vmap_cnf"
 
     $MS2MAPDB render $mapdb --out "$old" --config $rend_cnf\
-      --define "{\"nom_name\":\"$nom\", \"hr\":\"1\"}"\
+      --define "{\"nom_name\":\"$nom\", \"hr\":\"0\"}"\
       --mkref nom --north --name $nom --dpi 150 --margins 10 --top_margin 30\
       --title "$name   /$(date +"%Y-%m-%d")/" --title_size 20\
       --cmap_load $cmap --png_format pal
