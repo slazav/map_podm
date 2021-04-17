@@ -12,7 +12,6 @@
 
 MS2MAPDB=ms2mapdb
 MS2NOM=ms2nom
-cmap=conf/cmap.png
 tlist=TILES/tile.list
 vmap_cnf=conf/import_vmap.cfg
 
@@ -61,14 +60,14 @@ for brd_file in brd/*.gpx; do
     $MS2MAPDB render $mapdb --config conf/render.cfg\
       --define "{\"nom_name\":\"$name\", \"hr\":\"0\", \"border_style\":\"none\"}"\
       --tmap --add --out "TILES/{x}-{y}-{z}.png" --zmin 7 --zmax 14\
-      --bgcolor 0 --png_format pal --cmap_load $cmap\
+      --bgcolor 0 --png_format argb \
       --border_file $brd_file\
       --tmap_scale 1 --fit_patt_size;\
 
     $MS2MAPDB render $mapdb --config conf/render.cfg\
       --define "{\"nom_name\":\"$name\", \"hr\":\"0\", \"border_style\":\"none\"}"\
       --tmap --add --out "TILES/{x}-{y}-{z}.png" --zmin 0 --zmax 6\
-      --bgcolor 0 --png_format pal --cmap_load $cmap\
+      --bgcolor 0 --png_format argb \
       --border_file $brd_file\
       --tmap_scale 1 --mapdb_minsc 1;\
 
