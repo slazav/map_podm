@@ -59,14 +59,14 @@ for brd_file in brd/*.gpx; do
     fi
 
     $MS2MAPDB render $mapdb --config conf/render.cfg\
-      --define "{\"nom_name\":\"$name\", \"hr\":\"0\", \"border_style\":\"none\"}"\
+      --define "{\"nom_name\":\"$name\", \"hr\":\"0\", \"border_style\":\"clip\"}"\
       --tmap --add --out "TILES/{x}-{y}-{z}.png" --zmin 7 --zmax 14\
       --bgcolor 0 --png_format pal --cmap_load $cmap\
       --border_file $brd_file\
       --tmap_scale 1 --fit_patt_size;\
 
     $MS2MAPDB render $mapdb --config conf/render.cfg\
-      --define "{\"nom_name\":\"$name\", \"hr\":\"0\", \"border_style\":\"none\"}"\
+      --define "{\"nom_name\":\"$name\", \"hr\":\"0\", \"border_style\":\"clip\"}"\
       --tmap --add --out "TILES/{x}-{y}-{z}.png" --zmin 0 --zmax 6\
       --bgcolor 0 --png_format pal --cmap_load $cmap\
       --border_file $brd_file\
