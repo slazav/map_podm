@@ -9,3 +9,4 @@ all:
 	./make_out
 	./make_index
 	./make_tiles
+	./make_tiles_db

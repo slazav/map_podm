@@ -1,0 +1,54 @@
+#!/bin/sh -eu
+
+# Скрипт создаёт файлы стандартного формата MBTiles, а также
+#   sqlitedb для OSMAnd. Требует заранее отрисованных плиток.
+
+SQLITEDB=slazav.sqlitedb                # Имя файла с картами для OSM
+MBTILES=slazav.mbtiles                  # Имя файла с картами в формате MBTiles
+
+cd TILES 2>/dev/null ||
+  (echo Сначала отрисуйте плитки в папке TILES скриптом make_tiles &&
+  exit 0)
+
+rm -f $SQLITEDB $MBTILES
+# Создадим пустые базы обоих типов
+sqlite3 $SQLITEDB 'CREATE TABLE tiles (x int, y int, z int, image blob,
+  PRIMARY KEY (x,y,z));'
+sqlite3 $MBTILES 'CREATE TABLE tiles (tile_column int, tile_row int,
+  zoom_level int, tile_data blob,
+  PRIMARY KEY (tile_column, tile_row, zoom_level));'
+
+
+# Запишем плитки в файл sqlitedb
+find * -type f -name *png | sed "y|/-.|   |" | \
+(
+echo 'PRAGMA journal_mode = OFF; PRAGMA synchronous = 0;'
+while read tile; do
+  read z x y ignore <<< $tile
+  echo -n "INSERT INTO tiles (x, y, z, image) VALUES "
+  echo     "($x, $y, $z, readfile('$z/${x}-${y}.png'));"
+done ) | sqlite3 $SQLITEDB
+
+# Запишем плитки в файл mbtiles
+find * -type f -name *png | sed "y|/-.|   |" | \
+(
+echo 'PRAGMA journal_mode = OFF; PRAGMA synchronous = 0;'
+while read tile; do
+  read z x y ignore <<< $tile
+  echo -n "INSERT INTO tiles (tile_column, tile_row, "
+  echo -n "zoom_level, tile_data) VALUES "
+  echo    "($x, $((2**z-1-y)), $z, readfile('$z/${x}-${y}.png'));"
+done ) | sqlite3 $MBTILES
+
+# Создадим ещё по одной нужной таблице в sqlitedb и mbtiles
+sqlite3 $SQLITEDB "CREATE TABLE info (tilenumbering text, minzoom int,
+  maxzoom int);"
+sqlite3 $SQLITEDB "INSERT INTO info (tilenumbering, minzoom, maxzoom)
+  VALUES ('', (SELECT min(z) FROM tiles), (SELECT max(z) FROM tiles))"
+sqlite3 $MBTILES "CREATE TABLE metadata (format text, minzoom int,
+  maxzoom int);"
+sqlite3 $MBTILES "INSERT INTO metadata (format, minzoom, maxzoom)
+  VALUES ('png', (SELECT min(zoom_level) FROM tiles),
+  (SELECT max(zoom_level) FROM tiles))"
+
+cd -
