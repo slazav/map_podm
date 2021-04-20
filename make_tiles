@@ -10,6 +10,9 @@
 # - render with --tmap_scale 1: rescale larger tiles to smaller ones.
 # - do separately for zoom 9..12 and 0..8
 
+SQLITEDB=slazav.sqlitedb                # Имя файла с картами для OSM
+MBTILES=slazav.mbtiles                  # Имя файла с картами в формате MBTiles
+
 MS2MAPDB=ms2mapdb
 MS2NOM=ms2nom
 tlist=TILES/tile.list
@@ -31,6 +34,11 @@ for brd_file in brd/*.gpx; do
   [ -f "$brd_file" ] || continue
     echo "Border: $brd_file"
 
+  # update mapdb if needed
+  mapdb=mapdb/allmap/
+  $MS2MAPDB delete $mapdb
+  $MS2MAPDB create $mapdb
+
   # For each map file
   for vmap in $files; do
     [ -f "$vmap" ] || continue
@@ -40,42 +48,65 @@ for brd_file in brd/*.gpx; do
     # Is the file touches the border?
     $($MS2NOM --ext --name "$nom" --cover "$brd_file") || continue
 
-    # Skip if vmap older then tile.list AND
-    # border older then tile.list and no --all option is given:
-    if [ "$vmap" -ot "$tlist" -a "$brd_file" -ot "$tlist" -a "$all" = 0 ]; then
-      continue
-    fi
+    echo "Add map to index: $name"
+    $MS2MAPDB import_vmap $mapdb $vmap --config "$vmap_cnf"
 
-    echo "Rendering: $name"
-
-    # update mapdb if needed
-    mapdb=mapdb/$name
-    if [ "$mapdb/objects.db" -ot "$vmap" -o "$mapdb/objects.db" -ot "$vmap_cnf" ]; then
-      echo "Update mapdb: $name"
-      $MS2MAPDB delete $mapdb
-      $MS2MAPDB create $mapdb
-      $MS2MAPDB import_vmap $mapdb $vmap --config "$vmap_cnf"
-    fi
-
-    $MS2MAPDB render $mapdb --config conf/render.cfg\
-      --define "{\"nom_name\":\"$name\", \"hr\":\"0\", \"border_style\":\"none\"}"\
-      --tmap --add --out "TILES/{x}-{y}-{z}.png" --zmin 7 --zmax 14\
-      --bgcolor 0 --png_format argb \
-      --border_file $brd_file\
-      --tmap_scale 1 --fit_patt_size;\
-
-    $MS2MAPDB render $mapdb --config conf/render.cfg\
-      --define "{\"nom_name\":\"$name\", \"hr\":\"0\", \"border_style\":\"none\"}"\
-      --tmap --add --out "TILES/{x}-{y}-{z}.png" --zmin 0 --zmax 6\
-      --bgcolor 0 --png_format argb \
-      --border_file $brd_file\
-      --tmap_scale 1 --mapdb_minsc 1;\
-
-    need_upd=1
   done
 
+  $MS2MAPDB render $mapdb --config conf/render.cfg\
+    --define "{\"nom_name\":\"n37-025\", \"hr\":\"0\", \"border_style\":\"none\"}"\
+    --tmap --add --out "TILES/{z}/{x}-{y}.png" --zmin 7 --zmax 14\
+    --bgcolor 0 --png_format argb \
+    --border_file $brd_file\
+    --tmap_scale 1 --fit_patt_size;\
+
+  $MS2MAPDB render $mapdb --config conf/render.cfg\
+    --define "{\"nom_name\":\"n37-025\", \"hr\":\"0\", \"border_style\":\"none\"}"\
+    --tmap --add --out "TILES/{z}/{x}-{y}.png" --zmin 0 --zmax 6\
+    --bgcolor 0 --png_format argb \
+    --border_file $brd_file\
+    --tmap_scale 1 --mapdb_minsc 1;\
 done
 
-if [ "$need_upd" = 1 ]; then
-  find TILES/ -name '*.png' | xargs md5sum | sed 's| TILES/| |' > $tlist
-fi
+pushd TILES
+  rm -f $SQLITEDB $MBTILES
+  # Создадим пустые базы обоих типов
+  sqlite3 $SQLITEDB 'CREATE TABLE tiles (x int, y int, z int, image blob,
+    PRIMARY KEY (x,y,z));'
+  sqlite3 $MBTILES 'CREATE TABLE tiles (tile_column int, tile_row int,
+    zoom_level int, tile_data blob,
+    PRIMARY KEY (tile_column, tile_row, zoom_level));'
+
+
+  # Запишем плитки в файл sqlitedb
+  find * -type f -name *png | sed "y|/-.|   |" | \
+  (
+  echo 'PRAGMA journal_mode = OFF; PRAGMA synchronous = 0;'
+  while read tile; do
+    read z x y ignore <<< $tile
+    echo -n "INSERT INTO tiles (x, y, z, image) VALUES "
+    echo     "($x, $y, $z, readfile('$z/${x}-${y}.png'));"
+  done ) | sqlite3 $SQLITEDB
+
+  # Запишем плитки в файл mbtiles
+  find * -type f -name *png | sed "y|/-.|   |" | \
+  (
+  echo 'PRAGMA journal_mode = OFF; PRAGMA synchronous = 0;'
+  while read tile; do
+    read z x y ignore <<< $tile
+    echo -n "INSERT INTO tiles (tile_column, tile_row, "
+    echo -n "zoom_level, tile_data) VALUES "
+    echo    "($x, $((2**z-1-y)), $z, readfile('$z/${x}-${y}.png'));"
+  done ) | sqlite3 $MBTILES
+
+  # Создадим ещё по одной нужной таблице в sqlitedb и mbtiles
+  sqlite3 $SQLITEDB "CREATE TABLE info (tilenumbering text, minzoom int,
+    maxzoom int);"
+  sqlite3 $SQLITEDB "INSERT INTO info (tilenumbering, minzoom, maxzoom)
+    VALUES ('', (SELECT min(z) FROM tiles), (SELECT max(z) FROM tiles))"
+  sqlite3 $MBTILES "CREATE TABLE metadata (format text, minzoom int,
+    maxzoom int);"
+  sqlite3 $MBTILES "INSERT INTO metadata (format, minzoom, maxzoom)
+    VALUES ('png', (SELECT min(zoom_level) FROM tiles),
+    (SELECT max(zoom_level) FROM tiles))"
+popd
