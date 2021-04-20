@@ -54,7 +54,7 @@ for brd_file in brd/*.gpx; do
   done
 
   $MS2MAPDB render $mapdb --config conf/render.cfg\
-    --define "{\"nom_name\":\"n37-025\", \"hr\":\"0\", \"border_style\":\"none\"}"\
+    --define "{\"nom_name\":\"n37-025\", \"hr\":\"0\", \"border_style\":\"noclip\"}"\
     --tmap --add --out "TILES/{z}/{x}-{y}.png" --zmin 7 --zmax 14\
     --bgcolor 0 --png_format argb \
     --border_file $brd_file\
