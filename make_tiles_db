@@ -20,24 +20,24 @@ sqlite3 $MBTILES 'CREATE TABLE tiles (tile_column int, tile_row int,
 
 
 # Запишем плитки в файл sqlitedb
-find * -type f -name *png | sed "y|/-.|   |" | \
+find . -type f -name '*png' | sed "y|/-.|   |" | \
 (
 echo 'PRAGMA journal_mode = OFF; PRAGMA synchronous = 0;'
 while read tile; do
-  read z x y ignore <<< $tile
+  read x y z ignore <<< $tile
   echo -n "INSERT INTO tiles (x, y, z, image) VALUES "
-  echo     "($x, $y, $z, readfile('$z/${x}-${y}.png'));"
+  echo     "($x, $y, $z, readfile('${x}-${y}-${z}.png'));"
 done ) | sqlite3 $SQLITEDB
 
 # Запишем плитки в файл mbtiles
-find * -type f -name *png | sed "y|/-.|   |" | \
+find . -type f -name '*png' | sed "y|/-.|   |" | \
 (
 echo 'PRAGMA journal_mode = OFF; PRAGMA synchronous = 0;'
 while read tile; do
-  read z x y ignore <<< $tile
+  read x y z ignore <<< $tile
   echo -n "INSERT INTO tiles (tile_column, tile_row, "
   echo -n "zoom_level, tile_data) VALUES "
-  echo    "($x, $((2**z-1-y)), $z, readfile('$z/${x}-${y}.png'));"
+  echo    "($x, $((2**z-1-y)), $z, readfile('${x}-${y}-${z}.png'));"
 done ) | sqlite3 $MBTILES
 
 # Создадим ещё по одной нужной таблице в sqlitedb и mbtiles
