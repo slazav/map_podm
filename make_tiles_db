@@ -2,14 +2,16 @@
 
 # Скрипт создаёт файлы стандартного формата MBTiles, а также sqlitedb для OSMAnd
 
-SQLITEDB=slazav.sqlitedb                # Имя файла с картами для OSM
-MBTILES=slazav.mbtiles                  # Имя файла с картами в формате MBTiles
+SQLITEDB=slazav                # Базовое имя файла с картами для OSM
+MBTILES=slazav                 # Базовое имя файла с картами в формате MBTiles
 NUMCPU=`cat /proc/cpuinfo | grep process | wc -l`	# Определяем число процессоров
 
 TILES_DB_DIR=TILES_DB
 MS2MAPDB=ms2mapdb
 MS2NOM=ms2nom
 vmap_cnf=conf/import_vmap.cfg
+# Промежуточный формат файлов, на результат не влияет
+TMPEXT=png                     # tiff требует в 6 раз больше места во время отрисовки, а png отрисовывается чуть дольше
 
 if [ ! -f conf/pics/redk.png ]; then
 	echo Не найдены файлы шаблонов
@@ -22,7 +24,7 @@ pngquant -h >/dev/null ||
   exit 1)
 
 rm -rf $TILES_DB_DIR
-mkdir -p $TILES_DB_DIR
+mkdir -p $TILES_DB_DIR/light
 mkdir -p mapdb/
 
 files=${@:-vmap/*.vmap}
@@ -45,19 +47,20 @@ for brd_file in brd/*.gpx; do
     $MS2MAPDB create $mapdb
     $MS2MAPDB import_vmap $mapdb $vmap --config "$vmap_cnf"
 
+    # Для больших Z может потребоваться увеличить системные лимиты (ulimit)
     $MS2MAPDB render $mapdb --config conf/render.cfg\
       --define "{\"nom_name\":\"$name\", \"hr\":\"0\", \"border_style\":\"clip\"}"\
-      --tmap --add --out "$TILES_DB_DIR/{z}/{x}-{y}.png" --zmin 7 --zmax 14\
+      --tmap --add --out "$TILES_DB_DIR/light/{z}/{x}-{y}.$TMPEXT" --zmin 7 --zmax 14\
       --bgcolor 0 --png_format argb\
       --border_file $brd_file\
-      --tmap_scale 1 --fit_patt_size
+      --tmap_scale 1 --fit_patt_size --tiff_compression none
 
     $MS2MAPDB render $mapdb --config conf/render.cfg\
       --define "{\"nom_name\":\"$name\", \"hr\":\"0\", \"border_style\":\"clip\"}"\
-      --tmap --add --out "$TILES_DB_DIR/{z}/{x}-{y}.png" --zmin 0 --zmax 6\
+      --tmap --add --out "$TILES_DB_DIR/light/{z}/{x}-{y}.$TMPEXT" --zmin 0 --zmax 6\
       --bgcolor 0 --png_format argb\
       --border_file $brd_file\
-      --tmap_scale 1 --mapdb_minsc 1
+      --tmap_scale 1 --mapdb_minsc 1 --tiff_compression none
 
     wait
   done
@@ -65,48 +68,63 @@ done
 
 cd $TILES_DB_DIR
 
-echo Оптимизируем плитки с помощью pngquant
-find . -type f -name '*.png' | xargs -P $NUMCPU -n 1 pngquant --strip --nofs --skip-if-larger -f --ext .png || echo -n
+echo Копируем файлы в папку ночного режима
+cp -a light dark
 
-echo Записываем плитки в готовые файлы
+echo Перерисуем файлы ночного режима
+find dark -type f -name "*.$TMPEXT" | xargs -P $NUMCPU -I {} magick {} -colorspace OHTA -channel 0 -negate {}
 
-# Создадим пустые базы обоих типов
-sqlite3 $SQLITEDB 'CREATE TABLE tiles (x int, y int, z int, image blob,
-  PRIMARY KEY (x,y,z));'
-sqlite3 $MBTILES 'CREATE TABLE tiles (tile_column int, tile_row int,
-  zoom_level int, tile_data blob,
-  PRIMARY KEY (tile_column, tile_row, zoom_level));'
+if [ "x$TMPEXT" != "xpng" ]; then
+  echo Преобразуем в png, удалим промежуточные файлы
+  find . -type f -name "*.$TMPEXT" | sed "s/\.$TMPEXT//" | xargs -P $NUMCPU -n 1 -I {} convert "{}.$TMPEXT" "{}.png"
+  find . -type f -name "*.$TMPEXT" | xargs rm
+fi
 
-# Запишем плитки в файл sqlitedb
-find . -type f -name '*.png' | sed "y|/-.|   |" | \
-(
-echo 'PRAGMA journal_mode = OFF; PRAGMA synchronous = 0;'
-while read tile; do
-  read z x y ignore <<< $tile
-  echo -n "INSERT INTO tiles (x, y, z, image) VALUES "
-  echo     "($x, $y, $z, readfile('${z}/${x}-${y}.png'));"
-done ) | sqlite3 $SQLITEDB
+for maptype in light dark; do
+  echo Оптимизируем плитки $maptype с помощью pngquant
+  find $maptype -type f -name '*.png' | \
+      xargs -P $NUMCPU -n 1 pngquant --strip --nofs --skip-if-larger -f --ext .png || echo -n
 
-# Запишем плитки в файл mbtiles
-find . -type f -name '*.png' | sed "y|/-.|   |" | \
-(
-echo 'PRAGMA journal_mode = OFF; PRAGMA synchronous = 0;'
-while read tile; do
-  read z x y ignore <<< $tile
-  echo -n "INSERT INTO tiles (tile_column, tile_row, "
-  echo -n "zoom_level, tile_data) VALUES "
-  echo    "($x, $((2**z-1-y)), $z, readfile('${z}/${x}-${y}.png'));"
-done ) | sqlite3 $MBTILES
+  echo Записываем плитки $maptype в готовые файлы
 
-# Создадим ещё по одной нужной таблице в sqlitedb и mbtiles
-sqlite3 $SQLITEDB "CREATE TABLE info (tilenumbering text, minzoom int,
-  maxzoom int);"
-sqlite3 $SQLITEDB "INSERT INTO info (tilenumbering, minzoom, maxzoom)
-  VALUES ('', (SELECT min(z) FROM tiles), (SELECT max(z) FROM tiles))"
-sqlite3 $MBTILES "CREATE TABLE metadata (format text, minzoom int,
-  maxzoom int);"
-sqlite3 $MBTILES "INSERT INTO metadata (format, minzoom, maxzoom)
-  VALUES ('png', (SELECT min(zoom_level) FROM tiles),
-  (SELECT max(zoom_level) FROM tiles))"
+  # Создадим пустые базы обоих типов
+  sqlite3 $SQLITEDB-$maptype.sqlitedb 'CREATE TABLE tiles (x int, y int, z int, image blob,
+    PRIMARY KEY (x,y,z));'
+  sqlite3 $MBTILES-$maptype.mbtiles 'CREATE TABLE tiles (tile_column int, tile_row int,
+    zoom_level int, tile_data blob,
+    PRIMARY KEY (tile_column, tile_row, zoom_level));'
+
+  # Запишем плитки в файл sqlitedb
+  find $maptype -type f -name '*.png' | sed "y|/-.|   |" | \
+  (
+  echo 'PRAGMA journal_mode = OFF; PRAGMA synchronous = 0;'
+  while read tile; do
+    read ignore z x y ignore <<< $tile
+    echo -n "INSERT INTO tiles (x, y, z, image) VALUES "
+    echo     "($x, $y, $z, readfile('$maptype/${z}/${x}-${y}.png'));"
+  done ) | sqlite3 $SQLITEDB-$maptype.sqlitedb
+
+  # Запишем плитки в файл mbtiles
+  find $maptype -type f -name '*.png' | sed "y|/-.|   |" | \
+  (
+  echo 'PRAGMA journal_mode = OFF; PRAGMA synchronous = 0;'
+  while read tile; do
+    read ignore z x y ignore <<< $tile
+    echo -n "INSERT INTO tiles (tile_column, tile_row, "
+    echo -n "zoom_level, tile_data) VALUES "
+    echo    "($x, $((2**z-1-y)), $z, readfile('$maptype/${z}/${x}-${y}.png'));"
+  done ) | sqlite3 $MBTILES-$maptype.mbtiles
+
+  # Создадим ещё по одной нужной таблице в sqlitedb и mbtiles
+  sqlite3 $SQLITEDB-$maptype.sqlitedb "CREATE TABLE info (tilenumbering text, minzoom int,
+    maxzoom int);"
+  sqlite3 $SQLITEDB-$maptype.sqlitedb "INSERT INTO info (tilenumbering, minzoom, maxzoom)
+    VALUES ('', (SELECT min(z) FROM tiles), (SELECT max(z) FROM tiles))"
+  sqlite3 $MBTILES-$maptype.mbtiles "CREATE TABLE metadata (format text, minzoom int,
+    maxzoom int);"
+  sqlite3 $MBTILES-$maptype.mbtiles "INSERT INTO metadata (format, minzoom, maxzoom)
+    VALUES ('png', (SELECT min(zoom_level) FROM tiles),
+    (SELECT max(zoom_level) FROM tiles))"
+done
 
 cd -
