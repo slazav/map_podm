@@ -1,12 +1,11 @@
 ###############################
+
 in:
-	./make_in
+	vmaps_in
+
+out:
+	vmaps_out
 
 pr:
-	./make_preview
+	vmaps_preview
 
-all:
-	./make_out
-	./make_index
-	./make_tiles
-	./make_tiles_db
