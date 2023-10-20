@@ -1,16 +1,15 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<gpx version='1.1' creator='mapsoft-2'>
-  <trk>
-    <trkseg>
-      <trkpt lat='57.0142189' lon='32.2862080'></trkpt>
-      <trkpt lat='55.9339783' lon='32.3061965'></trkpt>
-      <trkpt lat='54.2418439' lon='34.8907750'></trkpt>
-      <trkpt lat='53.5509486' lon='36.4054878'></trkpt>
-      <trkpt lat='53.5285813' lon='37.5198446'></trkpt>
-      <trkpt lat='54.8904906' lon='42.1415073'></trkpt>
-      <trkpt lat='55.6885607' lon='42.1596103'></trkpt>
-      <trkpt lat='57.3820678' lon='39.6230119'></trkpt>
-      <trkpt lat='57.0215928' lon='32.2994494'></trkpt>
-    </trkseg>
-  </trk>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="http://nakarte.me" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" version="1.1">
+	<metadata>
+		<time>2023-10-20T15:00:30.757Z</time>
+	</metadata>
+	<trk>
+		<name>podm</name>
+		<trkseg>
+			<trkpt lat="51.883273" lon="29.904785"><time>1970-01-01T00:00:01.000Z</time></trkpt>
+			<trkpt lat="51.944265" lon="45.076904"><time>1970-01-01T00:00:01.000Z</time></trkpt>
+			<trkpt lat="60.048389" lon="45.120850"><time>1970-01-01T00:00:01.000Z</time></trkpt>
+			<trkpt lat="60.059358" lon="29.860840"><time>1970-01-01T00:00:01.000Z</time></trkpt>
+		</trkseg>
+	</trk>
 </gpx>
